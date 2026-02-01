@@ -3,6 +3,7 @@ const express = require("express");
 const fs = require("fs");
 const bcrypt = require("bcryptjs");
 const cors = require("cors");
+const path = require("path");
 require("dotenv").config(); // Load .env once
 
 const app = express();
@@ -10,6 +11,14 @@ app.use(express.json());
 app.use(cors()); // Allow all origins, you can restrict later
 
 const ORDERS_FILE = "./orders.json";
+
+/* ===== Serve Front-end ===== */
+app.use(express.static(path.join(__dirname, "public")));
+
+/* ===== Root Route ===== */
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
 /* ===== Helper Function to Read Orders ===== */
 function readOrders() {

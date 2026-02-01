@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dambog Nig Ltd - Nylon Printing</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">Dambog Nig Ltd</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#products">Products</a></li>
+      <li><a href="#order">Book / Order</a></li>
+      <li><a href="#admin">Official Page</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>High-Quality Custom Branded Nylon Bags</h1>
+      <p>Durable, stylish, and perfect for all business types. Make your brand stand out with our premium nylon printing.</p>
+      <a href="#order" class="btn-primary">Order Now</a>
+    </div>
+    <div class="hero-slider">
+      <img src="images/machine.jpg" class="slide active" alt="Nylon Bag 1">
+      <img src="images/machin3.jpeg" class="slide" alt="Nylon Bag 2">
+      <img src="images/machine4.jpg" class="slide" alt="Nylon Bag 3">
+      <img src="images/machine2.jpg" class="slide" alt="Nylon Bag 3">
+      <img src="images/nylon.jpg" class="slide" alt="Nylon Bag 3">
+    </div>
+  </section>
+
+  <!-- About Company -->
+  <section id="about" class="about">
+    <h2>About the Company</h2>
+    <p>Dambog Nig Ltd is a professional nylon production and printing company located at Dada Asaila, Obasanjo, Ota, Ogun State, Nigeria. We specialize in high-quality nylon bags for businesses and individuals.</p>
+    <ul>
+      <li>High-quality branded printing for all types of businesses</li>
+      <li>Eco-friendly production and durable nylon materials</li>
+      <li>Fast delivery across Nigeria</li>
+      <li>Custom design consultation for your brand</li>
+      <li>Affordable bulk order pricing</li>
+    </ul>
+  </section>
+
+  <!-- CEO Section -->
+  <section class="ceo">
+    <h2>About the CEO</h2>
+    <div class="ceo-section">
+      <img src="images/ceo.jpeg" class="ceo-pic" alt="CEO Picture">
+      <div class="ceo-info">
+        <ul>
+          <li>Visionary entrepreneur in nylon manufacturing</li>
+          <li>Customer satisfaction and quality-focused</li>
+          <li>Experienced in scalable business solutions</li>
+          <li>Mentor to young entrepreneurs</li>
+          <li>Innovative leader in custom packaging solutions</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section id="products" class="products">
+    <h2>Our Products</h2>
+    <div class="product-grid">
+      <div class="product-card">
+        <img src="images/nyl.jpg" alt="Shopping Nylon Bags">
+        <h3>Shopping Nylon Bags</h3>
+      </div>
+      <div class="product-card">
+        <img src="images/nyl2.jpg" alt="Printed Nylon Bags">
+        <h3>Printed Nylon Bags</h3>
+      </div>
+      <div class="product-card">
+        <img src="images/nyl3.jpg" alt="Printed Nylon Bags">
+        <h3>Printed Nylon Bags</h3>
+      </div>
+      <div class="product-card">
+        <img src="images/nyl4.jpg" alt="Printed Nylon Bags">
+        <h3>Printed Nylon Bags</h3>
+      </div>
+      <div class="product-card">
+        <img src="images/nyl5.JPG" alt="Printed Nylon Bags">
+        <h3>Printed Nylon Bags</h3>
+      </div>
+      <div class="product-card">
+        <img src="images/nyl6.jpg" alt="Printed Nylon Bags">
+        <h3>Printed Nylon Bags</h3>
+      </div>
+      <div class="product-card">
+        <img src="images/nyl7.jpg" alt="Printed Nylon Bags">
+        <h3>Printed Nylon Rolls</h3>
+      </div>
+      <div class="product-card">
+        <img src="images/nyl8.jpg" alt="Printed Nylon Bags">
+        <h3>Printed Nylon Bags</h3>
+      </div>
+      <div class="product-card">
+        <img src="images/nyl9.jpg" alt="Custom Logo Nylon">
+        <h3>Custom  Nylon Rolls</h3>
+      </div>
+      <div class="product-card">
+        <img src="images/nyl10.jpg" alt="Industrial Nylon Rolls">
+        <h3>Industrial Nylon Rolls</h3>
+      </div>
+      <div class="product-card">
+        <img src="images/nyl11.jpg" alt="Printed Nylon Bags">
+        <h3>Industrial nylon Rolls</h3>
+      </div>
+         <div class="product-card">
+        <img src="images/nyl12.jpg" alt="Custom Logo Nylon">
+        <h3>Custom Logo Nylon</h3>
+      </div>
+      </div>
+    </div>
+    
+  </section>
+
+  <!-- Order / Book Section -->
+  <section id="order" class="order">
+    <h2>Book / Order</h2>
+    <form id="orderForm">
+      <input type="text" id="fullname" placeholder="Full Name" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="tel" id="phone" placeholder="Phone" required>
+      <input type="text" id="address" placeholder="Delivery Address" required>
+      <select id="product" required>
+        <option value="">Select Product</option>
+        <option value="Shopping Nylon Bags">Shopping Nylon Bags</option>
+        <option value="Printed Nylon Bags">Printed Nylon Bags</option>
+        <option value="Custom Logo Nylon">Custom Logo Nylon</option>
+        <option value="Industrial Nylon Rolls">Industrial Nylon Rolls</option>
+      </select>
+      <input type="number" id="quantity" placeholder="Quantity" required>
+      <select id="payment" onchange="toggleBank()" required>
+        <option value="Cash">Cash</option>
+        <option value="Transfer">Bank Transfer</option>
+      </select>
+      <div id="bankDetails" style="display:none;">
+        <p>Bank: First Bank</p>
+        <p>Account: 1122334455</p>
+        <p>Company: Dambog Nig Ltd</p>
+      </div>
+      <button type="submit">Submit Order</button>
+    </form>
+  </section>
+
+  
+  <section id="admin">
+  <h2>Official Admin Page</h2>
+
+  <div id="login">
+    <input type="password" id="pin" placeholder="Enter Admin PIN">
+    <button onclick="loginAdmin()">Login</button>
+  </div>
+
+  <div id="adminPanel" class="hidden">
+    <h3>All Orders</h3>
+    
+    <button onclick="downloadPDF()">Download Orders (PDF)</button>
+    <div id="orders"></div>
+  </div>
+ 
+
+</section>
+
+<!-- Success Modal -->
+<div id="successModal" class="modal">
+  <div class="modal-content">
+    <p>Order submitted successfully!</p>
+    <button id="modalOkBtn">OK</button>
+  </div>
+</div>
+
+
+  
+    <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 Dambog Nig Ltd. All rights reserved.</p>
+    <div class="socials">
+      <a href="#">Facebook</a>
+      <a href="#">Instagram</a>
+      <a href="#">Twitter</a>
+      <a href="#">WhatsApp</a>
+      
+    </div>
+    <p>
+    Address: Dada Asaila, Obasanjo, Ota, Ogun State, Nigeria <br>
+    © 2026 Dambog Nig Ltd</p>
+  
+  
+</footer>
+
+
+
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+
+
