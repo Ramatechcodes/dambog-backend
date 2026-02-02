@@ -1,86 +1,82 @@
-/* ===== Dependencies ===== */
 const express = require("express");
-const fs = require("fs");
 const bcrypt = require("bcryptjs");
 const cors = require("cors");
 const path = require("path");
-require("dotenv").config(); // Load .env once
+const { Pool } = require("pg");
+require("dotenv").config();
 
 const app = express();
 app.use(express.json());
-app.use(cors()); // Allow all origins, you can restrict later
-
-const ORDERS_FILE = "./orders.json";
-
-/* ===== Serve Front-end ===== */
+app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
 
-/* ===== Root Route ===== */
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
+});
+
+/* ======================
+   ROOT
+====================== */
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-/* ===== Helper Function to Read Orders ===== */
-function readOrders() {
-  try {
-    if (!fs.existsSync(ORDERS_FILE)) {
-      fs.writeFileSync(ORDERS_FILE, "[]");
-    }
-    const data = fs.readFileSync(ORDERS_FILE, "utf8");
-    return JSON.parse(data);
-  } catch (err) {
-    console.error("Error reading orders:", err);
-    return [];
-  }
-}
+/* ======================
+   SUBMIT ORDER
+====================== */
+app.post("/order", async (req, res) => {
+  const { fullname, email, phone, address, product, quantity, payment } = req.body;
 
-/* ===== Helper Function to Write Orders ===== */
-function writeOrders(orders) {
   try {
-    fs.writeFileSync(ORDERS_FILE, JSON.stringify(orders, null, 2));
-  } catch (err) {
-    console.error("Error writing orders:", err);
-  }
-}
+    await pool.query(
+      `INSERT INTO orders 
+      (fullname, email, phone, address, product, quantity, payment)
+      VALUES ($1,$2,$3,$4,$5,$6,$7)`,
+      [fullname, email, phone, address, product, quantity, payment]
+    );
 
-/* ===== Submit Order ===== */
-app.post("/order", (req, res) => {
-  const orders = readOrders();
-  orders.push({ ...req.body, date: new Date().toISOString() });
-  writeOrders(orders);
-  res.json({ success: true });
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false });
+  }
 });
 
-/* ===== Admin Login ===== */
+/* ======================
+   ADMIN LOGIN
+====================== */
 app.post("/admin/login", async (req, res) => {
   const { pin } = req.body;
+  const valid = await bcrypt.compare(pin, process.env.ADMIN_PIN_HASH);
+  if (!valid) return res.status(401).json({ success: false });
 
-  if (!pin) return res.status(400).json({ success: false, message: "PIN required" });
-
-  try {
-    const valid = await bcrypt.compare(pin, process.env.ADMIN_PIN_HASH);
-    if (!valid) return res.status(401).json({ success: false, message: "Invalid PIN" });
-
-    res.json({ success: true, token: "ADMIN_AUTH_OK" });
-  } catch (err) {
-    console.error("Login error:", err);
-    res.status(500).json({ success: false, message: "Server error" });
-  }
+  res.json({ success: true, token: "ADMIN_AUTH_OK" });
 });
 
-/* ===== Fetch Orders (Admin Only) ===== */
-app.get("/admin/orders", (req, res) => {
-  const auth = req.headers.authorization;
-  if (auth !== "ADMIN_AUTH_OK") {
+/* ======================
+   FETCH ORDERS
+====================== */
+app.get("/admin/orders", async (req, res) => {
+  if (req.headers.authorization !== "ADMIN_AUTH_OK") {
     return res.status(403).json({ message: "Unauthorized" });
   }
 
-  const orders = readOrders();
-  res.json(orders);
+  try {
+    const result = await pool.query(
+      "SELECT * FROM orders ORDER BY created_at DESC"
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json([]);
+  }
 });
 
-/* ===== Start Server ===== */
+/* ======================
+   START SERVER
+====================== */
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`✅ Backend running on http://localhost:${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
 });
