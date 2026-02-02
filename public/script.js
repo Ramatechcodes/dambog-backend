@@ -120,7 +120,8 @@ async function loadOrders() {
           Product: ${o.product}<br>
           Quantity: ${o.quantity}<br>
           Payment: ${o.payment}<br>
-          Date: ${new Date(o.date).toLocaleString()}
+          Date: ${new Date(order.created_at).toLocaleString()}
+
         </div>
       `;
     });
