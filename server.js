@@ -64,26 +64,44 @@ app.get("/setup-db", async (req, res) => {
    SUBMIT ORDER
 ============================== */
 app.post("/order", async (req, res) => {
-  const { fullname, email, phone, address, product, quantity, payment } = req.body;
-
-  if (!fullname || !phone || !product || !quantity || !payment) {
-    return res.status(400).json({ success: false, message: "Missing fields" });
-  }
+  const {
+    fullname,
+    email,
+    phone,
+    address,
+    product,
+    quantity,
+    payment
+  } = req.body;
 
   try {
     await pool.query(
-      `INSERT INTO orders
+      `
+      INSERT INTO orders
       (fullname, email, phone, address, product, quantity, payment)
-      VALUES ($1,$2,$3,$4,$5,$6,$7)`,
-      [fullname, email, phone, address, quantity ? Number(quantity) : 0, payment]
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      `,
+      [
+        fullname,
+        email || null,
+        phone,
+        address || null,
+        product,
+        quantity,
+        payment
+      ]
     );
 
     res.json({ success: true });
   } catch (err) {
     console.error("ORDER INSERT ERROR:", err);
-    res.status(500).json({ success: false });
+    res.status(500).json({
+      success: false,
+      message: "Order failed"
+    });
   }
 });
+
 
 /* ==============================
    ADMIN LOGIN
