@@ -8,14 +8,14 @@ function toggleBank() {
 }
 
 /* ==============================
-   SUBMIT ORDER (BACKEND)
+   SUBMIT ORDER
 ================================ */
 const orderForm = document.getElementById("orderForm");
 const modal = document.getElementById("successModal");
 const okBtn = document.getElementById("modalOkBtn");
 
 orderForm.addEventListener("submit", async (e) => {
-  e.preventDefault(); // prevent normal form submission
+  e.preventDefault();
 
   const order = {
     fullname: fullname.value,
@@ -36,38 +36,37 @@ orderForm.addEventListener("submit", async (e) => {
 
     if (!res.ok) throw new Error("Order failed");
 
-    // ✅ Show modal
     modal.style.display = "block";
 
-    // ✅ Wait for user click
     okBtn.onclick = () => {
-      modal.style.display = "none";           // hide modal
-      orderForm.reset();                       // reset form
-      document.getElementById("bankDetails").style.display = "none"; // hide bank
+      modal.style.display = "none";
+      orderForm.reset();
+      document.getElementById("bankDetails").style.display = "none";
     };
-
   } catch (err) {
     console.error(err);
     alert("Error submitting order. Please try again.");
   }
 });
 
-
 /* ==============================
    ADMIN AUTH
 ================================ */
 let adminToken = "";
-let cachedOrders = []; // used for PDF
+let cachedOrders = [];
 
 async function loginAdmin() {
   const pin = document.getElementById("pin").value;
 
   try {
-    const res = await fetch("https://dambog-backend.onrender.com/admin/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ pin })
-    });
+    const res = await fetch(
+      "https://dambog-backend.onrender.com/admin/login",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pin }),
+      }
+    );
 
     if (!res.ok) {
       alert("Wrong PIN");
@@ -81,25 +80,27 @@ async function loginAdmin() {
     document.getElementById("adminPanel").style.display = "block";
 
     loadOrders();
-
   } catch (err) {
     alert("Server error");
   }
 }
 
 /* ==============================
-   LOAD ORDERS (BACKEND)
+   LOAD ORDERS
 ================================ */
 async function loadOrders() {
   try {
-    const res = await fetch("https://dambog-backend.onrender.com/admin/orders", {
-      headers: { Authorization: adminToken }
-    });
+    const res = await fetch(
+      "https://dambog-backend.onrender.com/admin/orders",
+      {
+        headers: { Authorization: adminToken },
+      }
+    );
 
     if (!res.ok) throw new Error("Unauthorized");
 
     const orders = await res.json();
-    cachedOrders = orders; // save for PDF
+    cachedOrders = orders;
 
     const ordersDiv = document.getElementById("orders");
     ordersDiv.innerHTML = "";
@@ -114,25 +115,23 @@ async function loadOrders() {
         <div class="order-card">
           <strong>Order ${index + 1}</strong><br>
           Name: ${o.fullname}<br>
-          Email: ${o.email}<br>
+          Email: ${o.email || ""}<br>
           Phone: ${o.phone}<br>
-          Address: ${o.address}<br>
+          Address: ${o.address || ""}<br>
           Product: ${o.product}<br>
           Quantity: ${o.quantity}<br>
           Payment: ${o.payment}<br>
-          Date: ${new Date(order.created_at).toLocaleString()}
-
+          Date: ${new Date(o.created_at).toLocaleString()}
         </div>
       `;
     });
-
   } catch (err) {
     alert("Failed to load orders");
   }
 }
 
 /* ==============================
-   DOWNLOAD PDF (ADMIN ONLY)
+   DOWNLOAD PDF
 ================================ */
 function downloadPDF() {
   if (cachedOrders.length === 0) {
@@ -144,7 +143,6 @@ function downloadPDF() {
   const doc = new jsPDF();
   let y = 10;
 
-  // Header
   doc.setFontSize(14);
   doc.text("DAMBOG NIG LTD", 10, y);
   y += 7;
@@ -152,7 +150,7 @@ function downloadPDF() {
   doc.setFontSize(10);
   doc.text(
     "Nylon Production & Printing Company\n" +
-    "Dada Asaila, Obasanjo, Ota, Ogun State, Nigeria",
+      "Dada Asaila, Obasanjo, Ota, Ogun State, Nigeria",
     10,
     y
   );
@@ -170,13 +168,18 @@ function downloadPDF() {
 
     doc.setFontSize(10);
     doc.text(`Full Name: ${o.fullname}`, 10, y); y += 5;
-    doc.text(`Email: ${o.email}`, 10, y); y += 5;
+    doc.text(`Email: ${o.email || ""}`, 10, y); y += 5;
     doc.text(`Phone: ${o.phone}`, 10, y); y += 5;
-    doc.text(`Address: ${o.address}`, 10, y); y += 5;
+    doc.text(`Address: ${o.address || ""}`, 10, y); y += 5;
     doc.text(`Product: ${o.product}`, 10, y); y += 5;
     doc.text(`Quantity: ${o.quantity}`, 10, y); y += 5;
     doc.text(`Payment: ${o.payment}`, 10, y); y += 5;
-    doc.text(`Date: ${new Date(o.date).toLocaleString()}`, 10, y); y += 8;
+    doc.text(
+      `Date: ${new Date(o.created_at).toLocaleString()}`,
+      10,
+      y
+    );
+    y += 8;
 
     doc.line(10, y, 200, y);
     y += 6;
@@ -184,7 +187,10 @@ function downloadPDF() {
 
   doc.save("dambog-orders.pdf");
 }
-// Hero slider animation
+
+/* ==============================
+   HERO SLIDER
+================================ */
 let slides = document.querySelectorAll(".hero-slider img");
 let current = 0;
 
@@ -193,11 +199,5 @@ function nextSlide() {
   current = (current + 1) % slides.length;
   slides[current].classList.add("active");
 }
-setInterval(nextSlide, 3000); // Slide every 3 seconds
 
-// Show bank details
-function toggleBank() {
-  const payment = document.getElementById("payment").value;
-  document.getElementById("bankDetails").style.display =
-    payment === "Transfer" ? "block" : "none";
-}
+setInterval(nextSlide, 3000);
