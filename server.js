@@ -54,10 +54,11 @@ app.get("/setup-db", async (req, res) => {
 
     res.send("✅ Orders table created successfully");
   } catch (err) {
-    console.error("DB SETUP ERROR:", err);
+    console.error(err);
     res.status(500).send("❌ Database setup failed");
   }
 });
+
 
 /* ==============================
    SUBMIT ORDER
